@@ -201,6 +201,37 @@
       </Scan>
     </Item>
 
+    <Item Name="#Opera浏览器老版本备份（by MS-PC2）" Level="2">
+      <!--2017-11-23 13:50添加-->
+      <Description>#Opera浏览器升级到新版本后留下的备份文件，在故障时回滚到老版本。</Description>
+      <Group>#过期文件</Group>
+      <Scan>
+        <Applicable>
+          <ImageFlags>1</ImageFlags>
+          <Or>
+            <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe" Value="Path"/>
+            <RegExist Key="HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe" Value="Path"/>
+          </Or>
+        </Applicable>
+        <Applicable_1>
+          <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe" Value="Path"/>
+        </Applicable_1>
+        <Applicable_2>
+          <RegExist Key="HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe" Value="Path"/>
+        </Applicable_2>
+        <Activate>
+          <General RootPath="?GetRegSz(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe,Path)" Flags="Directory" ID="Applicable_1">
+            <Query>*.*.*.*</Query>
+            <Excluded>?GetFileVersion(%Root%Launcher.exe)</Excluded>`
+          </General>
+          <General RootPath="?GetRegSz(HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths\opera.exe,Path)" Flags="Directory" ID="Applicable_2">
+            <Query>*.*.*.*</Query>
+            <Excluded>?GetFileVersion(%Root%Launcher.exe)</Excluded>
+          </General>
+        </Activate>
+      </Scan>
+    </Item>
+    
     <Item Name="#PPLive老版本备份（by 何超）" Level="2">
       <!--2016-04-19 14:32添加-->
       <Description>#PPLive在升级到新版本后留下的备份文件，在故障时回滚到老版本。</Description>
@@ -439,7 +470,11 @@
         <Scan Type="Custom">
           <Applicable>
             <ImageFlags>1</ImageFlags>
-            <FileExist FilePath="%SystemRoot%\SoftwareDistribution\DeliveryOptimization"/>
+            <Or>
+              <FileExist FilePath="%SystemRoot%\SoftwareDistribution\DeliveryOptimization"/>
+              <FileExist FilePath="%SystemRoot%\DeliveryOptimization"/>
+              <FileExist FilePath="%SystemRoot%\ServiceProfiles\NetworkService\AppData\Local\Microsoft\Windows\DeliveryOptimization"/>
+            </Or>
           </Applicable>
           <Activate>
             <Custom ProcName="NCDOCacheOnlineCleanup"/>
@@ -648,6 +683,20 @@
       </Scan>
     </Item>
 
+<Item Name="#Windows Defender保护历史记录" Level="2">
+      <Description>#Windows Defender保护历史记录存放了Windows Defender日志，日志过多会导致打开保护历史记录记录闪退</Description>
+      <Warning>#清理后无法还原被隔离文件</Warning>
+      <Group>#应用程序</Group>
+      <Scan>
+        <Applicable>
+          <FileExist FilePath="%ProgramData%\Microsoft\Windows Defender\Scans\History"/>
+        </Applicable>
+        <Activate>
+          <General RootPath="%ProgramData%\Microsoft\Windows Defender\Scans\History"/>
+        </Activate>
+      </Scan>
+    </Item>
+
     <Item Name="#WebPI缓存" Level="2">
       <Description>#Web平台安装程序的缓存</Description>
       <Group>#应用程序</Group>
@@ -667,7 +716,6 @@
       <Group>#应用程序</Group>
       <Scan>
         <Applicable>
-          <IsBeta/>
           <FileExist FilePath="%ProgramData%\Microsoft\VisualStudio\Packages"/>
         </Applicable>
         <Activate>
@@ -783,7 +831,7 @@
           <General RootPath="%SystemRoot%\Performance\WinSAT\DataStore\"/>
           <General RootPath="*\System Volume Information\Chkdsk"/>
           <General RootPath="%ProgramData%\USOShared\Logs"/>
-          <General RootPath="%System%\WDI"/>
+          <General RootPath="%System%\WDI\LogFiles\*"/>
           <General RootPath="%System%\LogFiles\*"/>
           <General RootPath="%SystemRoot%\debug"/>
 
@@ -851,7 +899,6 @@
             <FileExist FilePath="%SystemDrive%\AMD"/>
             <FileExist FilePath="%SystemDrive%\Intel"/>
             <FileExist FilePath="%SystemDrive%\NVIDIA"/>
-            <FileExist FilePath="%SystemDrive%\Prog"/>
           </Or>
         </Applicable>
         <Activate>
@@ -870,11 +917,17 @@
       <Group>#临时文件</Group>
       <Scan Work="3">
         <Applicable>
-          <FileExist FilePath="%SystemDrive%\$Windows.~BT"/>
+          <Or>
+            <FileExist FilePath="%SystemDrive%\$Windows.~BT"/>
+            <FileExist FilePath="%SystemDrive%\$Windows.~WS"/>
+            <FileExist FilePath="%SystemDrive%\$Windows.~LS"/>
+          </Or>
         </Applicable>
         <Activate>
           <General RootPath="%SystemDrive%" Flags="Directory">
             <Query>$Windows.~BT</Query>
+            <Query>$Windows.~WS</Query>
+            <Query>$Windows.~LS</Query>
           </General>
         </Activate>
       </Scan>
@@ -1044,6 +1097,22 @@
       </ScanCollection>
     </Item>
 
+    <Item Name="#IDM临时文件（by MS-PC2）" Level="2">
+      <Description>#Internet Download Manager临时下载文件。</Description>
+      <Warning>#清理IDM临时文件可能导致正在下载的任务需要重新下载！</Warning>
+      <Group>#临时文件</Group>
+      <Scan>
+        <Applicable>
+          <ImageFlags>1</ImageFlags>
+          <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Internet Download Manager" Wow64="True"/>
+          <RegExist Key="HKEY_CURRENT_USER\Software\DownloadManager" Value="TempPath"/>
+        </Applicable>
+        <Activate>
+          <General RootPath="?GetRegSz(HKEY_CURRENT_USER\Software\DownloadManager,TempPath,False)DwnlData\"/>
+        </Activate>
+      </Scan>
+    </Item>
+    
     <!--存在风险-->
     <Item Name="#CompactOs（较慢）" Level="0">
       <Description>#对单纯读取的文件进行哈夫曼压缩，在不影响性能的情况下，显著减少系统体积。特别感谢矿工以及所有Compact团队成员无私的支持与帮助。</Description>
@@ -1786,16 +1855,19 @@
           <State>
             <Applicable>
               <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" Value="PeopleBand" Type="REG_DWORD" Data="0"/>
+              <RegExist Key="HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer" Value="HidePeopleBar" Type="REG_DWORD" Data="1"/>
             </Applicable>
           </State>
           <True>
             <Activate Restart="Explorer">
               <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" Value="PeopleBand" Type="REG_DWORD" Data="0"/>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer" Value="HidePeopleBar" Type="REG_DWORD" Data="1"/>
             </Activate>
           </True>
           <False>
             <Activate Restart="Explorer">
               <RegDelete Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" Value="PeopleBand"/>
+              <RegDelete Key="HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer" Value="HidePeopleBar"/>
             </Activate>
           </False>
         </Current>
@@ -1853,12 +1925,12 @@
             </Applicable>
           </State>
           <True>
-            <Activate>
+            <Activate Restart="Explorer">
               <RegWrite Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Value="ShowSecondsInSystemClock" Type="REG_DWORD" Data="1"/>
             </Activate>
           </True>
           <False>
-            <Activate>
+            <Activate Restart="Explorer">
               <RegDelete Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Value="ShowSecondsInSystemClock"/>
             </Activate>
           </False>
@@ -1976,6 +2048,7 @@
       <Item Type="CheckBox" Name="#使任务栏更透明（by 518516.net）">
         <Applicable>
           <OSVersion Compare=">=">10.0</OSVersion>
+          <OSVersion Compare="&lt;">10.0.17134</OSVersion>
         </Applicable>
         <System>
           <State>
@@ -2037,6 +2110,79 @@
               <RegDelete Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\DWM" Value="AccentColorInactive"/>
             </Activate>
           </False>
+        </Default>
+      </Item>
+
+      <Item Type="Combo" Name="#*桌面壁纸质量调整为（by IT之家）">
+        <Applicable>
+          <OSVersion Compare=">=">6.0</OSVersion>
+        </Applicable>
+        <Current>
+          <Dropdown Name="#低质量（更快）">
+            <Warning>#将导致桌面壁纸质量降低，影响视觉效果。</Warning>
+            <Applicable>
+                <RegExist Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+            </Activate>
+          </Dropdown>
+          <Dropdown Name="#默认（推荐）">
+            <Applicable>
+              <Not>
+                <Or>
+                  <RegExist Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+                  <RegExist Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+                </Or>
+              </Not>
+            </Applicable>
+            <Activate>
+              <RegDelete Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality"/>
+            </Activate>
+          </Dropdown>
+          <Dropdown Name="#高质量（更清晰）">
+            <Warning>#将增加系统资源消耗。</Warning>
+            <Applicable>
+              <RegExist Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_CURRENT_USER\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+            </Activate>
+          </Dropdown>
+        </Current>
+
+        <Default>
+          <Dropdown Name="#低质量（更快）">
+            <Warning>#将导致桌面壁纸质量降低，影响视觉效果。</Warning>
+            <Applicable>
+              <RegExist Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+            </Activate>
+          </Dropdown>
+          <Dropdown Name="#默认（推荐）">
+            <Applicable>
+              <Not>
+                <Or>
+                  <RegExist Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="96"/>
+                  <RegExist Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+                </Or>
+              </Not>
+            </Applicable>
+            <Activate>
+              <RegDelete Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality"/>
+            </Activate>
+          </Dropdown>
+          <Dropdown Name="#高质量（更清晰）">
+            <Warning>#将增加系统资源消耗。</Warning>
+            <Applicable>
+              <RegExist Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_USERS\DEFAULT\Control Panel\Desktop" Value="JPEGImportQuality" Type="REG_DWORD" Data="256"/>
+            </Activate>
+          </Dropdown>
         </Default>
       </Item>
     </Group>
@@ -2228,18 +2374,23 @@
         <System>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" Value="DisableAntiSpyware" Type="REG_DWORD" Data="1"/>
+              <Or>
+                <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" Value="DisableAntiSpyware" Type="REG_DWORD" Data="1"/>
+                <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" Value="DisableRealtimeMonitoring" Type="REG_DWORD" Data="1"/>
+              </Or>
             </Applicable>
           </State>
           <True>
             <Warning>#关闭Windows Defender后可提高计算机响应速度，但是也将增加电脑被攻击的几率！</Warning>
             <Activate>
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" Value="DisableAntiSpyware" Type="REG_DWORD" Data="1"/>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" Value="DisableRealtimeMonitoring" Type="REG_DWORD" Data="1"/>
             </Activate>
           </True>
           <False>
             <Activate>
-              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" Value="DisableAntiSpyware"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" Value="DisableAntiSpyware" SkipError="2"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" Value="DisableRealtimeMonitoring" SkipError="2"/>
             </Activate>
           </False>
         </System>
@@ -2251,6 +2402,7 @@
       <Item Type="CheckBox" Name="#不允许在开始菜单显示建议">
         <Applicable>
           <OSVersion Compare=">=">10.0</OSVersion>
+          <OSVersion Compare="&lt;">10.0.16299</OSVersion>
         </Applicable>
         <Current>
           <State>
@@ -2287,7 +2439,51 @@
           </False>
         </Default>
       </Item>
-
+      
+      <Item Type="CheckBox" Name="#不允许在开始菜单显示建议（by powerxing04）">
+        <Applicable>
+          <OSVersion Compare=">=">10.0.16299</OSVersion>
+        </Applicable>
+        <Current>
+          <State>
+            <Applicable>
+              <RegExist Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <RegWrite Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled" Type="REG_DWORD" Data="0"/>
+              <RegWrite Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338389Enabled" Type="REG_DWORD" Data="1"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegDelete Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled"/>
+              <RegDelete Key="HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338389Enabled" SkipError="2"/>
+            </Activate>
+          </False>
+        </Current>
+        <Default>
+          <State>
+            <Applicable>
+              <RegExist Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <RegWrite Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled" Type="REG_DWORD" Data="0"/>
+              <RegWrite Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338389Enabled" Type="REG_DWORD" Data="1"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegDelete Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338388Enabled"/>
+              <RegDelete Key="HKEY_USERS\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SubscribedContent-338389Enabled" SkipError="2"/>
+            </Activate>
+          </False>
+        </Default>
+      </Item>
+      
       <Item Type="CheckBox" Name="#关闭在应用商店中查找关联应用（by Asoft）">
         <Applicable>
           <OSVersion Compare=">=">6.2</OSVersion>
@@ -2313,12 +2509,17 @@
 
       <Item Type="CheckBox" Name="#关闭商店应用推广（by 、Cloud.）">
         <Applicable>
-          <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled"/>
+          <OSVersion Compare=">=">10.0</OSVersion>
         </Applicable>
         <Current>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <Not>
+                  <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled"/>
+                </Not>
+                <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -2328,7 +2529,7 @@
           </True>
           <False>
             <Activate>
-              <RegDelete Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="1"/>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="1"/>
             </Activate>
           </False>
         </Current>
@@ -2336,7 +2537,12 @@
         <Default>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <Not>
+                  <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled"/>
+                </Not>
+                <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="PreInstalledAppsEnabled" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -2354,12 +2560,17 @@
 
       <Item Type="CheckBox" Name="#关闭锁屏时的Windows 聚焦推广（by 、Cloud.）">
         <Applicable>
-          <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable"/>
+          <OSVersion Compare=">=">10.0</OSVersion>
         </Applicable>
         <Current>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <Not>
+                  <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable"/>
+                </Not>
+                <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -2369,7 +2580,7 @@
           </True>
           <False>
             <Activate>
-              <RegDelete Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="1"/>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="1"/>
             </Activate>
           </False>
         </Current>
@@ -2377,7 +2588,12 @@
         <Default>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <Not>
+                  <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable"/>
+                </Not>
+                <RegExist Key="HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="RotatingLockScreenEnable" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -2395,12 +2611,17 @@
 
       <Item Type="CheckBox" Name="#关闭“使用Windows时获取技巧和建议”（by 、Cloud.）">
         <Applicable>
-          <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled"/>
+          <OSVersion Compare=">=">10.0</OSVersion>
         </Applicable>
         <Current>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <Not>
+                  <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled"/>
+                </Not>
+                <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -2410,7 +2631,7 @@
           </True>
           <False>
             <Activate>
-              <RegDelete Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled" Type="REG_DWORD" Data="1"/>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" Value="SoftLandingEnabled" Type="REG_DWORD" Data="1"/>
             </Activate>
           </False>
         </Current>
@@ -2571,7 +2792,7 @@
         </Default>
       </Item>
 
-      <Item Type="CheckBox" Name="#登陆界面默认打开小键盘（by IT之家）">
+      <Item Type="CheckBox" Name="#登录界面默认打开小键盘（by IT之家）">
         <System>
           <State>
             <Applicable>
@@ -2633,6 +2854,34 @@
           <False>
             <Activate>
               <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" Value="AllowCortana"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
+      
+    <Item Type="CheckBox" Name="#显示首次登录动画（by intionwun &amp; 组策略编辑器）">
+        <Applicable>
+          <OSVersion Compare=">=">6.2</OSVersion>
+        </Applicable>
+        <System>
+          <State>
+            <Applicable>
+              <Or>
+                <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" Value="EnableFirstLogonAnimation" Type="REG_DWORD" Data="1"/>
+                <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" Value="EnableFirstLogonAnimation" Type="REG_DWORD" Data="1"/>
+              </Or>  
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" Value="EnableFirstLogonAnimation" Type="REG_DWORD" Data="1"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" Value="EnableFirstLogonAnimation"/>     
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" Value="EnableFirstLogonAnimation" Type="REG_DWORD" Data="0"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" Value="EnableFirstLogonAnimation"/>
             </Activate>
           </False>
         </System>
@@ -2842,7 +3091,35 @@
           </False>
         </System>
       </Item>
-
+      
+      <Item Type="CheckBox" Name="#shift右击时显示在此处打开命令窗口（by sandtechnology）"> 
+        <Applicable> 
+          <OSVersion Compare=">=">10.0.15063.0</OSVersion> 
+        </Applicable> 
+        <System> 
+          <State> 
+            <Applicable> 
+              <And> 
+                <RegExist Key="HKEY_CLASSES_ROOT\Directory\Background\shell\cmd" Value="ShowBasedOnVelocityId" Type="REG_DWORD"/>  
+                <RegExist Key="HKEY_CLASSES_ROOT\Directory\shell\cmd" Value="ShowBasedOnVelocityId" Type="REG_DWORD"/> 
+              </And> 
+            </Applicable> 
+          </State>  
+          <True> 
+            <Activate> 
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\shell\cmd" NewKey="HKEY_CLASSES_ROOT\Directory\shell\cmd" Value="HideBasedOnVelocityId" NewValue="ShowBasedOnVelocityId"/>  
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\Background\shell\cmd" NewKey="HKEY_CLASSES_ROOT\Directory\Background\shell\cmd" Value="HideBasedOnVelocityId" NewValue="ShowBasedOnVelocityId"/> 
+            </Activate> 
+          </True>  
+          <False> 
+            <Activate> 
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\shell\cmd" NewKey="HKEY_CLASSES_ROOT\Directory\shell\cmd" Value="ShowBasedOnVelocityId" NewValue="HideBasedOnVelocityId"/>  
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\Background\shell\cmd" NewKey="HKEY_CLASSES_ROOT\Directory\Background\shell\cmd" Value="ShowBasedOnVelocityId" NewValue="HideBasedOnVelocityId"/> 
+            </Activate> 
+          </False> 
+        </System> 
+      </Item> 
+      
       <Item Type="CheckBox" Name="#创建快捷方式时不添&quot;快捷方式&quot;文字（by 518516.net）">
         <Current>
           <State>
@@ -3069,7 +3346,7 @@
             </Applicable>
           </State>
           <True>
-            <Activate>
+            <Activate Restart="Explorer">
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}\PropertyBag" Value="ThisPCPolicy" Type="REG_SZ" Data="Hide"/>
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}\PropertyBag" Value="ThisPCPolicy" Type="REG_SZ" Data="Hide"/>
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}\PropertyBag" Value="ThisPCPolicy" Type="REG_SZ" Data="Hide"/>
@@ -3582,7 +3859,7 @@
         </Default>
       </Item>
 
-      <Item Type="CheckBox" Name="#将语言栏隐藏到任务拦（by 溯汐潮）">
+      <Item Type="CheckBox" Name="#将语言栏隐藏到任务栏（by 溯汐潮）">
         <Current>
           <State>
             <Applicable>
@@ -3701,6 +3978,7 @@
 
       <Item Type="CheckBox" Name="#将桌面右键菜单“个性化”调整为Windows 7模式（by 大胖子技术员）">
         <Applicable>
+          <OSVersion Compare="&lt;=">10.0.14393</OSVersion>
           <Or>
             <RegExist Key="HKEY_CLASSES_ROOT\DesktopBackground\Shell\Personalize\command" Value="DelegateExecute" Type="REG_SZ" Data="{06622D85-6856-4460-8DE1-A81921B41C4B}"/>
             <RegExist Key="HKEY_CLASSES_ROOT\DesktopBackground\Shell\Personalize\command" Value="DelegateExecute" Type="REG_SZ" Data="{556FF0D6-A1EE-49E5-9FA4-90AE116AD744}"/>
@@ -4336,6 +4614,7 @@
 
       <Item Type="CheckBox" Name="#隐藏资源管理器导航窗口中的家庭组">
         <Applicable>
+          <FileExist FilePath="%SystemRoot%\System32\provsvc.dll"/>
           <RegExist Key="HKEY_CLASSES_ROOT\CLSID\{B4FB3F98-C1EA-428d-A78A-D1F5659CBA93}\ShellFolder" Value="Attributes" Type="REG_DWORD"/>
         </Applicable>
         <System>
@@ -4513,7 +4792,8 @@
             <Activate>
               <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\ContextMenuHandlers\igfxDTCM" Key="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\-ContextMenuHandlers\igfxDTCM" SkipError="2"/>
               <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\ContextMenuHandlers\igfxOSP" Key="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\-ContextMenuHandlers\igfxOSP" SkipError="2"/>
-              <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\ContextMenuHandlers\igfxcui" Key="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\-ContextMenuHandlers\igfxcui" SkipError="2"/>            </Activate>
+              <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\ContextMenuHandlers\igfxcui" Key="HKEY_CLASSES_ROOT\Directory\Background\ShellEx\-ContextMenuHandlers\igfxcui" SkipError="2"/>
+            </Activate>
           </False>
         </System>
       </Item>
@@ -5255,7 +5535,7 @@
           <True>
             <Activate>
               <RegMove Key="HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\WorkFolders" NewKey="HKEY_CLASSES_ROOT\*\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
-              <RegMove Key="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" NewKey="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" NewKey="HKEY_CLASSES_ROOT\Directory\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
               <RegMove Key="HKEY_CLASSES_ROOT\Directory\background\shellex\ContextMenuHandlers\WorkFolders" NewKey="HKEY_CLASSES_ROOT\Directory\background\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
               <RegMove Key="HKEY_CLASSES_ROOT\AllFilesystemObjects\shell\LaunchWorkfoldersControl" NewKey="HKEY_CLASSES_ROOT\AllFilesystemObjects\-shell\LaunchWorkfoldersControl" SkipError="2"/>
             </Activate>
@@ -5263,7 +5543,7 @@
           <False>
             <Activate>
               <RegMove NewKey="HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\WorkFolders" Key="HKEY_CLASSES_ROOT\*\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
-              <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" Key="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
+              <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\WorkFolders" Key="HKEY_CLASSES_ROOT\Directory\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
               <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\background\shellex\ContextMenuHandlers\WorkFolders" Key="HKEY_CLASSES_ROOT\Directory\background\-shellex\ContextMenuHandlers\WorkFolders" SkipError="2"/>
               <RegMove NewKey="HKEY_CLASSES_ROOT\AllFilesystemObjects\shell\LaunchWorkfoldersControl" Key="HKEY_CLASSES_ROOT\AllFilesystemObjects\-shell\LaunchWorkfoldersControl" SkipError="2"/>
             </Activate>
@@ -5392,6 +5672,62 @@
           </False>
         </System>
       </Item>
+
+      <Item Type="CheckBox" Name="#禁用文件夹的“包含到库中”右键菜单（by choyri）">
+        <Applicable>
+          <Or>
+            <RegExist Key="HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\Library Location"/>
+            <RegExist Key="HKEY_CLASSES_ROOT\Folder\shellex\-ContextMenuHandlers\Library Location"/>
+          </Or>
+        </Applicable>
+        <System>
+          <State>
+            <Applicable>
+              <Not>
+                <RegExist Key="HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\Library Location"/>
+              </Not>
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <RegMove Key="HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\Library Location" NewKey="HKEY_CLASSES_ROOT\Folder\shellex\-ContextMenuHandlers\Library Location"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegMove NewKey="HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\Library Location" Key="HKEY_CLASSES_ROOT\Folder\shellex\-ContextMenuHandlers\Library Location"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
+
+      <Item Type="CheckBox" Name="#禁用桌面的“NVIDIA 控制面板”右键菜单（by choyri）">
+        <Applicable>
+          <Or>
+            <RegExist Key="HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\NvCplDesktopContext"/>
+            <RegExist Key="HKEY_CLASSES_ROOT\Directory\Background\shellex\-ContextMenuHandlers\NvCplDesktopContext"/>
+          </Or>
+        </Applicable>
+        <System>
+          <State>
+            <Applicable>
+              <Not>
+                <RegExist Key="HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\NvCplDesktopContext"/>
+              </Not>
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <RegMove Key="HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\NvCplDesktopContext" NewKey="HKEY_CLASSES_ROOT\Directory\Background\shellex\-ContextMenuHandlers\NvCplDesktopContext"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegMove NewKey="HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\NvCplDesktopContext" Key="HKEY_CLASSES_ROOT\Directory\Background\shellex\-ContextMenuHandlers\NvCplDesktopContext"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
     </Group>
 
     <Group Name="#Microsoft Edge">
@@ -5415,6 +5751,30 @@
           <False>
             <Activate>
               <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge" Value="PreventFirstRunPage"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
+
+      <Item Type="CheckBox" Name="#关闭Adobe Flash即点即用">
+        <Applicable>
+          <OSVersion Compare=">=">10.0.15063</OSVersion>
+        </Applicable>
+        <System>
+          <State>
+            <Applicable>
+              <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Security" Value="FlashClickToRunMode" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+          </State>
+          <True>
+            <Warning>#此选项将降低计算机安全性，增加Adobe Flash的安全隐患！</Warning>
+            <Activate>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Security" Value="FlashClickToRunMode" Type="REG_DWORD" Data="0"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Security" Value="FlashClickToRunMode"/>
             </Activate>
           </False>
         </System>
@@ -6143,6 +6503,36 @@
       </Item>
     </Group>
 
+    <Group Name="#微软注音输入法">
+      <Applicable>
+        <RegExist Key="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IME\15.0\IMETC"/>
+      </Applicable>
+
+      <Item Type="Combo" Name="#默认输入模式（by iliGPU）：">
+        <Applicable>
+          <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\IME\15.0\IMETC"/>
+        </Applicable>
+        <Current>
+          <Dropdown Name="#中文模式">
+            <Applicable>
+              <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\IME\15.0\IMETC" Value="Default Input Mode" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\IME\15.0\IMETC" Value="Default Input Mode" Type="REG_DWORD" Data="0"/>
+            </Activate>
+          </Dropdown>
+          <Dropdown Name="#英数模式">
+            <Applicable>
+              <RegExist Key="HKEY_CURRENT_USER\Software\Microsoft\IME\15.0\IMETC" Value="Default Input Mode" Type="REG_DWORD" Data="1"/>
+            </Applicable>
+            <Activate>
+              <RegWrite Key="HKEY_CURRENT_USER\Software\Microsoft\IME\15.0\IMETC" Value="Default Input Mode" Type="REG_DWORD" Data="1"/>
+            </Activate>
+          </Dropdown>
+        </Current>
+      </Item>
+    </Group>
+    
     <Group Name="Windows Update">
       <Item Type="CheckBox" Name="#自动安装无需重启的更新（by Rambin）">
         <System>
@@ -6302,7 +6692,7 @@
             </Applicable>
             <Activate>
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="AUOptions" Type="REG_DWORD" Data="2"/>
-              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" Type="REG_DWORD" Data="1"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" SkipError="2"/>
             </Activate>
           </Dropdown>
           <Dropdown Name="#检查并下载更新">
@@ -6311,7 +6701,7 @@
             </Applicable>
             <Activate>
               <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="AUOptions" Type="REG_DWORD" Data="3"/>
-              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" Type="REG_DWORD" Data="1"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" SkipError="2"/>
             </Activate>
           </Dropdown>
           <Dropdown Name="#自动安装更新（推荐）">
@@ -6324,8 +6714,8 @@
               </Or>
             </Applicable>
             <Activate>
-              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="AUOptions" Type="REG_DWORD" Data="4"/>
-              <RegWrite Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" Type="REG_DWORD" Data="0"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="AUOptions" SkipError="2"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" Value="NoAutoUpdate" SkipError="2"/>
             </Activate>
           </Dropdown>
         </System>
@@ -6557,7 +6947,7 @@
         </System>
       </Item>
 
-      <Item Type="CheckBox" Name="#*禁用SMB1网络协议（by Jhovany200）">
+      <Item Type="CheckBox" Name="#*禁用SMB1网络协议（by MS-PC2）">
         <Applicable>
           <!--仅用于Vista以及Windows 7-->
           <OSVersion Compare="&lt;=">6.1</OSVersion>
@@ -6725,6 +7115,7 @@
 
       <Item Type="CheckBox" Name="#禁用家庭组">
         <Applicable>
+          <FileExist FilePath="%SystemRoot%\System32\provsvc.dll"/>
           <QueryServiceStart Name="HomeGroupProvider"/>
         </Applicable>
         <System>
@@ -7052,11 +7443,22 @@
       <Item Type="CheckBox" Name="#关闭快速启动">
         <Applicable>
           <OSVersion Compare=">=">6.2</OSVersion>
+          <Not>
+            <!--VHD装载、PE系统不显示-->
+            <Or>
+              <ImageFlags>40</ImageFlags>
+              <ImageFlags>10</ImageFlags>
+            </Or>
+          </Not>
         </Applicable>
         <System>
           <State>
             <Applicable>
-              <RegExist Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" Value="HiberbootEnabled" Type="REG_DWORD" Data="0"/>
+              <Or>
+                <!--关闭休眠 或者 指定关闭快速启动都认为关闭了快速启动-->
+                <RegExist Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" Value="HibernateEnabled" Type="REG_DWORD" Data="0"/>
+                <RegExist Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" Value="HiberbootEnabled" Type="REG_DWORD" Data="0"/>
+              </Or>
             </Applicable>
           </State>
           <True>
@@ -7067,7 +7469,42 @@
           </True>
           <False>
             <Activate>
+              <!--先尝试开启休眠-->
+              <ExplorerNotify Type="Cmd" Cmd="powercfg -hibernate on"/>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" Value="HibernateEnabled" Type="REG_DWORD" Data="1"/>
+
+              <!--开启快速启动-->
               <RegWrite Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power" Value="HiberbootEnabled" Type="REG_DWORD" Data="1"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
+
+      <Item Type="CheckBox" Name="#关闭休眠（by powerxing04）">
+        <Applicable>
+          <Not>
+            <!--VHD装载、PE系统不显示-->
+            <ImageFlags>40</ImageFlags>
+            <ImageFlags>10</ImageFlags>
+          </Not>
+        </Applicable>
+        <System>
+          <State>
+            <Applicable>
+              <RegExist Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" Value="HibernateEnabled" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+          </State>
+          <True>
+            <Warning>#关闭休眠后将导致快速启动以及混合休眠不可用，这样将增加断电丢失数据的风险！</Warning>
+            <Activate>
+              <ExplorerNotify Type="Cmd" Cmd="powercfg -hibernate off"/>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" Value="HibernateEnabled" Type="REG_DWORD" Data="0"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <ExplorerNotify Type="Cmd" Cmd="powercfg -hibernate on"/>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" Value="HibernateEnabled" Type="REG_DWORD" Data="1"/>
             </Activate>
           </False>
         </System>
@@ -7235,6 +7672,28 @@
           </False>
         </System>
       </Item>
+
+      <Item Type="CheckBox" Name="#禁用WfpDiag.ETL日志（by powerxing04）">
+        <System>
+          <State>
+            <Applicable>
+              <RegExist Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BFE\Parameters\Policy\Options" Value="CollectNetEvents" Type="REG_DWORD" Data="0"/>
+            </Applicable>
+          </State>
+          <True>
+            <Activate>
+              <ExplorerNotify Type="Cmd" Cmd="NETSH WFP SET OPTIONS NETEVENTS=OFF"/>
+              <RegWrite Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BFE\Parameters\Policy\Options" Value="CollectNetEvents" Type="REG_DWORD" Data="0"/>
+            </Activate>
+          </True>
+          <False>
+            <Activate>
+              <ExplorerNotify Type="Cmd" Cmd="NETSH WFP SET OPTIONS NETEVENTS=ON"/>
+              <RegDelete Key="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BFE\Parameters\Policy\Options" Value="CollectNetEvents"/>
+            </Activate>
+          </False>
+        </System>
+      </Item>
     </Group>
   </SystemOptimization>
   <ESDDecryptKey>
@@ -7261,7 +7720,7 @@
       <en>Some games will not run properly.</en>
       <es>Algunos juegos no se ejecutarán correctamente.</es>
       <zh-Hans>将导致某些游戏无法正常运行。</zh-Hans>
-      <zh-Hant>將導致某些遊戲無法正常運行。</zh-Hant>
+      <zh-Hant>將導致某些遊戲無法正常執行。</zh-Hant>
       <fr>Certains jeux ne fonctionnent pas correctement.</fr>
       <ru>Некоторые игры не будут работать должным образом.</ru>
       <ja>一部のゲームは実行できません。</ja>
@@ -7270,7 +7729,7 @@
       <en>VideoStudio 9 will not run properly. We do not recommend this update, unless you do not ue VideoStudio 9.</en>
       <es>VideoStudio 9 no se ejecutará correctamente. No recomendamos esta actualización, a menos que no se use VideoStudio 9.</es>
       <zh-Hans>将导致 会声会影9 无法正常使用。我们不推荐安装此更新，除非你不需要使用 会声会影9。</zh-Hans>
-      <zh-Hant>將導致 會聲會影9 無法正常使用。我們不推薦安裝此更新，除非你不需要使用 會聲會影9。</zh-Hant>
+      <zh-Hant>將導致「會聲會影 9」無法正常使用。我們不建議安裝此更新，除非你不需要使用「會聲會影 9」。</zh-Hant>
       <fr>Video Studio 9 ne fonctionnera pas correctement. Nous ne recommandons pas cette mise à jour, à moins que vous n'utilisiez pas Video Studio 9.</fr>
       <ru>VideoStudio 9 не будет работать должным образом. Мы не рекомендуем это обновление, если Вы не используете VideoStudio 9.</ru>
       <ja>VideoStudio 9 は実行できません。この更新インストールお勧めしません。ただし、VidioStudio 9 必要かありません。</ja>
@@ -7279,34 +7738,34 @@
       <en>For updating WUA API in order to support Windows Update scanning Windows 10 system update patches. We do not recommend this update as Windows has stopped upgrade.</en>
       <es>Para actualizar la API WUA con el fin de admitir Windows Update que analiza los parches de actualización del sistema de Windows 10. No recomendamos esta actualización ya que Windows ha detenido la actualización.</es>
       <zh-Hans>用于更新Wua API，以便支持Windows Update能够扫描Windows 10系统升级补丁。我们不推荐安装此更新，因为Windows 10已经停止升级。</zh-Hans>
-      <zh-Hant>用於更新Wua API，以便支援Windows Update能夠掃描Windows 10系統升級補丁。我們不推薦安裝此更新，因為Windows 10已經停止升級。</zh-Hant>
+      <zh-Hant>用於更新 Wua API，以便支援 Windows Update 能夠掃描 Windows 10 系統更新。我們不建議安裝此更新，因為 Windows 10 已經停止升級。</zh-Hant>
       <fr>Pour la mise à jour WUA API, afin d'aider les mises à jour Windows qui peuvent analyser des patchs de mise à niveau du système Windows 10. Nous ne recommandons pas d'installer cette mise à jour car la mise à niveau Windows 10 est arrêtée.</fr>
       <ru>Обновление WUA API для поддержки Windows Update проверки системных исправлений Windows 10. Мы не рекомендуем устанавливать это обновление, поскольку Windows 10 должен остановить обновление.</ru>
       <ja>Wua API を更新し、Windows 10 アップデートをスキャンします。でも、Windows 10 無料更新終了しました、インストールお勧めしません。</ja>
     </Warning>
     <Warning ID="KB3068708|KB3080149">
       <en>Customer experience and remote diagnostics update, to collect Windows diagnostic data.</en>
-      <es>Experiencia del cliente y actualización de diagnósticos remotos, para recopilar datos de diagnóstico de Windows.</es>
+      <es>Experiencia del usuario y actualización de diagnósticos remotos, para recopilar datos de diagnóstico de Windows.</es>
       <zh-Hans>客户体验和诊断遥测更新，用于收集Windows诊断信息。</zh-Hans>
-      <zh-Hant>客戶體驗和診斷遙測更新，用於收集Windows診斷資訊。</zh-Hant>
+      <zh-Hant>客戶體驗和遠端診斷更新，用於收集 Windows 診斷資料。</zh-Hant>
       <fr>Expérience client et mise à jour de diagnostic à distance, afin de recueillir des données de diagnostic de Windows.</fr>
       <ru>Обновление удаленной диагностики и качества обслуживания клиентов для сбора диагностических данных Windows.</ru>
       <ja>カスタマー エクスペリエンスおよび利用統計情報の更新です、Windows の診断データを収集します。</ja>
     </Warning>
     <Warning ID="KB3075249">
       <en>This update will adjust UAC default logic to esclate customer experience and remote diagnostics program (Windows diagnostics information collection program) to silent elevated privileges.</en>
-      <es>Esta actualización ajustará la lógica predeterminada de UAC para anular la experiencia del cliente y el programa de diagnóstico remoto (programa de recopilación de información de diagnósticos de Windows) con privilegios elevados silenciosos.</es>
+      <es>Esta actualización ajustará la lógica predeterminada de UAC para anular la experiencia del usuario y el programa de diagnóstico remoto (programa de recopilación de información de diagnósticos de Windows) con privilegios elevados silenciosos.</es>
       <zh-Hans>此更新将调整UAC默认逻辑，将客户体验和诊断遥测程序（Windows诊断信息收集程序）调整为静默提升权限。</zh-Hans>
-      <zh-Hant>此更新將調整UAC預設邏輯，將客戶體驗和診斷遙測程式（Windows診斷資訊收集程式）調整為靜默提升許可權。</zh-Hant>
+      <zh-Hant>此更新將調整 UAC 預設邏輯，將客戶體驗和遠端診斷程式 (Windows 診斷資訊收集程式) 調整為幕後提升權限。</zh-Hant>
       <fr>Cette mise à jour va ajuster la logique par défaut UAC pour intensifier l'expérience client et à distance le programme de diagnostic (programme de collecte d'informations de diagnostic Windows) à des privilèges élevés discrets.</fr>
       <ru>Это обновление настраивает поведение UAC по-умолчанию для программы удаленной диагностики и качества обслуживания клиентов  (программа сбора диагностической информации Windows).</ru>
       <ja>この更新は UAC の既定論理を調整します。カスタマー エクスペリエンスおよび利用統計情報（Windows 診断情報収集プログラム）のユーザー アカウント制御は通知しない</ja>
     </Warning>
     <Warning ID="KB3021917">
       <en>This update improves the performance of customer experience and remote diagnostics program (Windows diagnostics information collection program).</en>
-      <es>Esta actualización mejora el rendimiento de la experiencia del cliente y el programa de diagnóstico remoto (programa de recopilación de información de diagnóstico de Windows).</es>
+      <es>Esta actualización mejora el rendimiento de la experiencia del usuario y el programa de diagnóstico remoto (programa de recopilación de información de diagnóstico de Windows).</es>
       <zh-Hans>此更新用于改进客户体验和诊断遥测程序（Windows诊断信息收集程序）运行性能。</zh-Hans>
-      <zh-Hant>此更新用於改進客戶體驗和診斷遙測程式（Windows診斷資訊收集程式）運行性能。</zh-Hant>
+      <zh-Hant>此更新用於改進客戶體驗和遠端診斷程式 (Windows 診斷資訊收集程式) 執行效能。</zh-Hant>
       <fr>Cette mise à jour améliore les performances de l'expérience client et à distance le programme de diagnostic (programme de collecte d'informations de diagnostic Windows).</fr>
       <ru>Это обновление повышает производительность программы удаленной диагностики и качества обслуживания клиентов (программа сбора диагностической информации Windows).</ru>
       <ja>この更新はカスタマー エクスペリエンスおよび利用統計情報（Windows 診断情報収集プログラム）の性能を向上させます。</ja>
@@ -7314,8 +7773,8 @@
     <Warning ID="KB3081954">
       <en>This update adds remote diagnostics program to work folder and solves the problem that the configuration of work folder gets lost when Windows 7 is upgraded to Windows 10. We recommend this update if you plan to upgrade to Windows 10.</en>
       <es>Esta actualización agrega el programa de diagnóstico remoto a la carpeta de trabajo y resuelve el problema de que la configuración de la carpeta de trabajo se pierde cuando Windows 7, se actualiza a Windows 10. Recomendamos esta actualización si planea actualizar a Windows 10.</es>
-      <zh-Hans>此更新将为工作文件夹添加添加诊断遥测程序，同时解决了Windows 7升级到Windows 10后丢失工作文件夹配置问题。如果你打算升级到Windows 10则建议你安装此更新。</zh-Hans>
-      <zh-Hant>此更新將為工作資料夾添加添加診斷遙測程式，同時解決了Windows 7升級到Windows 10後丟失工作資料夾配置問題。如果你打算升級到Windows 10則建議你安裝此更新。</zh-Hant>
+      <zh-Hans>此更新将为工作文件夹添加诊断遥测程序，同时解决了Windows 7升级到Windows 10后丢失工作文件夹配置问题。如果你打算升级到Windows 10则建议你安装此更新。</zh-Hans>
+      <zh-Hant>此更新將為工作資料夾加入遠端診斷程式，同時解決了 Windows 7 升級到 Windows 10 後遺失工作資料夾配置問題。如果你打算升級到 Windows 10 則建議你安裝此更新。</zh-Hant>
       <fr>Cette mise à jour ajoute des diagnostics à distance concernant le dossier de travail et résout le problème qu'on perd la configuration du dossier de travail lorsque Windows 7 est mis à niveau vers Windows 10. Nous recommandons cette mise à jour si vous prévoyez de mettre à niveau vers Windows 10.</fr>
       <ru>Это обновление добавляет программу удаленной диагностики и решает проблему потери конфигурации рабочей папки при обновлении Windows 7 до Windows 10. Мы рекомендуем это обновление, если Вы планируете обновиться до Windows 10.</ru>
       <ja>この更新はワーク フォルダーに利用統計情報を追加します、同時に、Windows 7 から Windows 10 へのアップグレード後ワーク フォルダーの設定紛失を解決します。もし Windows 10 にアップグレード待ち、この更新はインストールお勧めします。</ja>
@@ -7324,7 +7783,7 @@
       <en>Some ASUS PCs with UEFI boot option will not start when this update is applied. We do not recommend this update unless you do not use ASUS PCs.</en>
       <es>Algunas PC de ASUS con la opción de arranque UEFI no se iniciarán cuando se aplique esta actualización. No recomendamos esta actualización a menos que no utilices ASUS PCs.</es>
       <zh-Hans>此更新可能导致某些UEFI启动的华硕电脑无法启动。我们不推荐安装此更新，除非你不使用华硕电脑。</zh-Hans>
-      <zh-Hant>此更新可能導致某些UEFI啟動的華碩電腦無法啟動。我們不推薦安裝此更新，除非你不使用華碩電腦。</zh-Hant>
+      <zh-Hant>此更新可能導致某些 UEFI 啟動的華碩電腦無法啟動。我們不建議安裝此更新，除非你不使用華碩電腦。</zh-Hant>
       <fr>Certains PC ASUS avec option de démarrage UEFI ne démarrent pas lorsque cette mise à jour est appliquée. Nous ne recommandons pas cette mise à jour si vous utilisez un PC ASUS.</fr>
       <ru>Некоторые ПК ASUS  с опцией загрузки UEFI не запускаются при применении этого обновления. Мы не рекомендуем это обновление, если Вы не используете ПК ASUS.</ru>
       <ja>この更新は一部の ASUS PC は UEFI で起動できません。ASUS PC はインストールお勧めしません。</ja>
@@ -7333,22 +7792,31 @@
       <en>This update is expired, and is replaced by Windows stack update in October 2016. We do not recommend this update if you do not want to introduce expired updates. But some updates will not be integrated off-line if you do not install this update. If you want to apply all Windows updates off-line, you have to install this update, then install other updates.</en>
       <es>Esta actualización ha expirado y se sustituye por la actualización de la pila de Windows de octubre del 2016. No recomendamos esta actualización si no desea introducir actualizaciones caducadas. Pero algunas actualizaciones no se integrarán fuera de línea si no instala esta actualización. Si desea aplicar todas las actualizaciones de Windows fuera de línea, debe instalar esta actualización e instalar otras actualizaciones.</es>
       <zh-Hans>此更新已经过期，已经被Windows 2016-10月堆栈更新取代。如果你不希望引入过期更新，则不建议安装此更新，但是这将导致某些更新无法离线集成。如果你希望能离线添加所有Windows更新，则你必须安装此更新，然后再安装其他更新。</zh-Hans>
-      <zh-Hant>此更新已經過期，已經被Windows 2016-10月堆疊更新取代。如果你不希望引入過期更新，則不建議安裝此更新，但是這將導致某些更新無法離線集成。如果你希望能離線添加所有Windows更新，則你必須安裝此更新，然後再安裝其他更新。</zh-Hant>
+      <zh-Hant>此更新已經過期，已經被 Windows 2016-10月堆疊更新取代。如果你不希望引入過期更新，則不建議安裝此更新，但是這將導致某些更新無法離線整合。如果你希望能離線加入所有 Windows 更新，則你必須安裝此更新，然後再安裝其他更新。</zh-Hant>
       <fr>Cette mise à jour a expiré, et est remplacée par toutes les mises à jour Windows en Octobre 2016. Nous ne recommandons pas cette mise à jour si vous ne voulez pas entrainer des mises à jour expirées. Mais certaines mises à jour ne pourront pas installées hors ligne si vous n'avez pas installer cette mise à jour. Si vous souhaitez installer toutes les mises à jour Windows hors ligne, vous devez installer cette mise à jour, puis ensuite installer d'autres mises à jour.</fr>
       <ru>Это обновление устарело и заменено обновлением стека Windows в октябре 2016. Мы не рекомендуем это обновление, если не хотите вносить устаревшие обновления. Но некоторые обновления не будут интегрированы в автономном режиме, если Вы не установите данное обновление. Если Вы хотите применить все обновления Windows в автономном режиме, необходимо установить это обновление, а затем установить другие обновления.</ru>
       <ja>この更新は期限切れました、Windows 2016-10 月累積的な更新プログラムは取り替えしました。期限切れの更新は追加したくない、このはインストールお勧めしません、でも一部の更新はオフライン追加できません。すべての更新は追加思う、この更新はインストール必要があります、そして他の更新はインストールします。</ja>
     </Warning>
     <Warning ID="KB3184143">
+      <en>This update has been used to remove information related to the free update to Windows 10, but currently there is no information about the free upgrade to Windows 10 and it is not necessary to install this update.</en>
+      <es>Esta actualización se ha utilizado para eliminar la información relacionada con la actualización gratuita a Windows 10, pero en la actualidad no hay información sobre la actualización gratuita a Windows 10 y generalmente no es necesario instalar esta actualización.</es>
       <zh-Hans>此更新已经用于删除Windows 10免费升级相关信息，但是目前Windows 10早就没有免费升级信息了，一般情况无需安装此更新。</zh-Hans>
-      <es>Esta actualización se ha utilizado para eliminar la información relacionada con la actualización gratuita de Windows 10, pero el actual Windows 10 durante mucho tiempo no dio información de actualización gratuita y generalmente no necesita instalar esta actualización.</es>
+      <zh-Hant>此更新已經用於刪除 Windows 10 免費升級相關資訊，但是目前 Windows 10 早就沒有免費升級資訊了，一般情況無需安裝此更新。</zh-Hant>
+      <ru>Это обновление используется для удаления сведений, связанных с бесплатным обновлением до Windows 10. Но в настоящее время обновление до Windows 10 больше не является бесплатным и установка данного обновления не требуется.</ru>
     </Warning>
     <Warning ID="KB3161102">
+      <en>This update will delete Windows Journal, and if you really need to use it, do not install this update.</en>
+      <es>Esta actualización eliminará Windows Journal, y si realmente necesita usarlo, no instale esta actualización.</es>
       <zh-Hans>此更新会删除Windows日记本，如果你确实需要使用日记本，那么请勿安装此更新。</zh-Hans>
-      <es>Esta actualización eliminará el diario de Windows, y si realmente necesita usar el diario, no instale esta actualización.</es>
+      <zh-Hant>此更新會刪除 Windows 筆記本 (Journal)，如果你確實需要使用筆記本 (Journal)，那麼請勿安裝此更新。</zh-Hant>
+      <ru>Это обновление удаляет журнал Windowsю Если требуется использовать журнал, не устанавливайте это обновление.</ru>
     </Warning>
     <Warning ID="KB4041083">
-      <zh-Hans>此更新将导致AutoCAD 2014无法正常运行，如果你确实需要使用AutoCAD 2014，那么请勿安装此更新。</zh-Hans>
+      <en>This update will make AutoCAD 2014 not work properly, do not install this update if you really need to use AutoCAD 2014.</en>
       <es>Esta actualización hará que AutoCAD 2014 no funcione correctamente, no instale esta actualización si realmente necesita usar AutoCAD 2014.</es>
+      <zh-Hans>此更新将导致AutoCAD 2014无法正常运行，如果你确实需要使用AutoCAD 2014，那么请勿安装此更新。</zh-Hans>
+      <zh-Hant>此更新將導致 AutoCAD 2014 無法正常執行，如果你確實需要使用 AutoCAD 2014，那麼請勿安裝此更新。</zh-Hant>
+      <ru>Это обновление приведет к неправильной работе AutoCAD 2014. Если требуется использовать AutoCAD 2014, не устанавливайте данное обновление.</ru>
     </Warning>
     <!--过期更新-->
     <Warning ID="KB982726" Type="Hide"/>
@@ -7373,7 +7841,9 @@
   </WSUS>
   <DefaultFilterList>
     <Item>$Recycle.Bin</Item>
-    <Item>$Windows.~bt</Item>
+    <Item>$Windows.~BT</Item>
+    <Item>$Windows.~WS</Item>
+    <Item>$Windows.~LS</Item>
     <Item>Recycler</Item>
     <Item>Recycled</Item>
     <Item>PerfLogs</Item>
@@ -7395,10 +7865,15 @@
     <Item>ProgramData\Microsoft\Windows\Caches\</Item>
     <Item>Users\*\AppData\Local\Temp\</Item>
     <Item>Users\*\AppData\Local\Microsoft\Windows\Explorer\</Item>
-    <Item>Users\*\AppData\Local\Microsoft\Windows\Caches\</Item>
     <Item>Users\*\AppData\Local\Microsoft\Windows\INetCache\</Item>
     <!--过滤Linux子系统，以免备份失败-->
     <Item>Users\*\AppData\Local\lxss</Item>
+    <Item>Users\*\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs\</Item>
+    <Item>Users\*\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\LocalState\rootfs\</Item>
+    <Item>Users\*\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu16.04onWindows_79rhkp1fndgsc\LocalState\rootfs\</Item>
+    <!--过滤OneDrive，避免1803无法复制-->
+    <Item>Users\*\OneDrive</Item>
+    <Item>Users\*\OneDrive - *</Item>
   </DefaultFilterList>
   <TimeZoneMap>
     <x2>SA Western Standard Time</x2>

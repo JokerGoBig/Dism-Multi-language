@@ -7,8 +7,8 @@ Also some control characters should be preferably encoded as numeric character e
     <     Less than                    &lt;
     >     More than                    &gt;
     &     And                          &amp;
-    '     Single quotation mark        &apos;      ’ (apostrophe) or 'English quotes'
-    "     Double quotation mark        &quot;      "English quotes" or « French quotes »
+    '     Single quotation mark        &apos;      ’ (French apostrophe)
+    "     Double quotation mark        &quot;      « French guillemets »
     \t    Tabulation control           &#9;
     \n    Line feed (newline) control  &#xA;
     \r    Carriage return control      &#xD;
@@ -213,7 +213,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="扫描" Link="Analyser"/>
     <String Target="清理" Link="Nettoyer"/>
 
-    <String Target="存在风险" Link="Risque détecté"/>
+    <String Target="存在风险" Link="Opération risquée"/>
     <String Target="建议保留" Link="Garder"/>
     <String Target="可以删除" Link="Demander à supprimer"/>
     <String Target="建议删除" Link="Supprimer immédiatement"/>
@@ -578,9 +578,10 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="%s 无法获取账号SID，错误代码：0x%.8X" Link="%s Impossible d’obtenir le compte SID, code d’erreur: 0x%.8X"/>
     <String Target="%s 所关联的用户（%s）无法删除，错误代码：0x%.8X" Link="%s Utilisateur associé (%s) ne peut pas être supprimé, code erreur : 0x%.8X"/>
     <String Target="%s 未关联任何用户。" Link="%s N’est pas associé à un utilisateur."/>
-    <String Target="恭喜你删除成功！但是某些应用可能属于Provisioned Appx，如果你遇到某个App所有者是SYSTEM，而且一直删不掉，请在 Provisioned Appx 删除它们。" Link="Félicitations ! Suppression réussie. Cependant, certaines applications peuvent être des « Provisioned Appx », si certaines app propriétaires du système persistent, SVP utiliser « Provisioned Appx » pour les supprimer."/>
+    <String Target="恭喜你删除成功！但是某些应用可能属于Provisioned Appx，如果你遇到某个App所有者是SYSTEM，而且一直删不掉，请在 Provisioned Appx 删除它们。" Link="Félicitations ! Suppression réussie. Cependant certaines applications peuvent être préinstallées sur le système : si certaines persistent, vous pouvez utiliser « Appx préinstallées » pour les supprimer."/>
     <String Target="User Appx" Link="Appx de l’utilisateur"/>
-    <String Target="Provisioned Appx" Link="Appx préinstallés"/>
+    <String Target="Provisioned Appx" Link="Appx préinstallées"/>
+    <String Target="删除Microsoft.StorePurchaseApp可能导致Windows Store无法使用，你确定要继续么？" Link="La suppression de Microsoft.StorePurchaseApp peut rendre le Windows Store inutilisable. Voulez-vous vraiment continuer?"/>
 
     <!--Windows Update-->
     <String Target="安装" Link="Installation"/>
@@ -702,7 +703,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="用于修改WIM、SWM以及ESD文件信息。" Link="Pour l’édition des fichiers WIM, et SWM/ESD."/>
 
-    <String Target="文件浏览器" Link="Explorateur"/>
+    <String Target="文件浏览器" Link="Explorateur de fichiers"/>
     <String Target="提供简单的文件浏览，并支持无视权限删除。" Link="Permet d’explorer certains fichiers tout simplement, en ignorant les droits de vérification."/>
 
     <String Target="ISO生成器" Link="Créer ISO"/>
@@ -729,6 +730,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="提交规则" Link="Règles en ligne"/>
 
     <!--Explorer-->
+    <String Target="Explorer" Link="Explorateur"/>
     <String Target="将任务栏中的Cortana调整为" Link="Choisir comment afficher Cortana dans la barre des tâches"/>
       <String Target="隐藏" Link="Masquer"/>
       <String Target="仅显示图标" Link="Afficher l’icône de recherche"/>
@@ -745,7 +747,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="隐藏“任务视图”按钮" Link="Masquer le bouton « Affichage de la tâche »"/>
 
-    <String Target="打开资源管理器时显示此电脑" Link="Ouvrir l’Explorateur de Fichiers pour ce PC"/>
+    <String Target="打开资源管理器时显示此电脑" Link="Ouvrir l’Explorateur de fichiers pour ce PC"/>
 
     <String Target="显示所有文件扩展名" Link="Afficher les extensions pour tous les types de fichiers"/>
 
@@ -778,6 +780,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="使任务栏更透明（by 518516.net）" Link="Rendre plus transparente la barre des tâches (par 518516.net)"/>
 
     <String Target="不允许在开始菜单显示建议" Link="Désactiver les suggestions dans le Menu Démarrer"/>
+    <String Target="不允许在开始菜单显示建议（by powerxing04）" Link="Désactiver les suggestions dans le Menu Démarrer (par powerxing04)"/>
 
     <String Target="在桌面显示我的电脑（by Rambin）" Link="Afficher mon ordinateur sur le bureau (par Rambin)"/>
       <String Target="跟随系统" Link="Suivre Système"/>
@@ -821,6 +824,11 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="优化非活动窗口标题栏颜色（by IT之家）" Link="Optimiser la couleur de la barre de titre de la fenêtre inactive (par IT Home)"/>
 
+    <String Target="*桌面壁纸质量调整为（by IT之家）" Link="Régler la qualité de rendu du papier peint du bureau (par ITHome)"/>
+      <String Target="低质量（更快）" Link="Basse (plus rapide)"/>
+      <String Target="默认（推荐）" Link="Par défaut"/>
+      <String Target="高质量（更清晰）" Link="Haute (plus précis)"/>
+
     <String Target="关闭视频文件预览，提高资源管理器响应速度（by ‍莫失莫忘）" Link="Désactiver l’aperçu vidéo pour améliorer le temps de réponse de l’Explorateur Windows (par MoWangMoShi)"/>
     <String Target="关闭音乐文件图片预览，提高资源管理器响应速度（by ‍莫失莫忘）" Link="Désactiver l’aperçu audio pour améliorer le temps de réponse de l’Explorateur Windows (par MoWangMoShi)"/>
     <String Target="关闭打开程序的“安全警告”（by 莫失莫忘）" Link="Désactiver l’avertissement de sécurité lors de l’ouverture des programmes (par MoWangMoShi)"/>
@@ -846,7 +854,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="禁用桌面的英特尔集显右键菜单（by 莫失莫忘）" Link="Désactiver les options du moteur graphique Intel intégré du menu contextuel sur le bureau (par MoWangMoShi)"/>
     <String Target="禁用目录、文件夹、所有对象、的“始终脱机可用”右键菜单" Link="Désactiver l’option « Activer l’utilisation en mode hors connexion » du menu contextuel sur les dossiers et tous les objets"/>
     <String Target="禁用磁盘的“以便携式方式打开”右键菜单（by 莫失莫忘）" Link="Désactiver l’option « Ouvrir en tant que dispositif portable » du menu contextuel pour les disques (par MoWangMoShi)"/>
-    <String Target="禁用磁盘的“刻录到光盘”右键菜单" Link="Désactivez « Graver l’image disque » du menu contextuel pour les images ISO (par MoWangMoShi)"/>
+    <String Target="禁用磁盘的“刻录到光盘”右键菜单" Link="Désactiver l’option « Graver l’image disque » du menu contextuel pour les images ISO (par MoWangMoShi)"/>
     <String Target="禁用磁盘的“启用Bitlocker”右键菜单（by 莫失莫忘）" Link="Désactiver l’option « Activer Bitlocker » du menu contextuel pour les disques (par MoWangMoShi)"/>
     <String Target="禁用磁盘的“复制磁盘”右键菜单" Link="Désactiver l’option « Copier » du menu contextuel pour les disques"/>
     <String Target="禁用文件、目录、桌面、磁盘以及库的“共享”右键菜单" Link="Désactiver l’option « Partager » du menu contextuel sur les fichiers, les dossiers, le bureau, les disques et les bibliothèques"/>
@@ -892,6 +900,9 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <!--Microsoft Edge-->
     <String Target="阻止Microsoft Edge“首次运行”欢迎页面（by IT之家）" Link="Empêcher Microsoft Edge d’ouvrir « Première exécution » (par ITHome)"/>
 
+    <String Target="关闭Adobe Flash即点即用" Link="Désactiver le clic d’activation d’Adobe Flash"/>
+      <String Target="此选项将降低计算机安全性，增加Adobe Flash的安全隐患！" Link="Cette désactivation réduira la sécurité de l’ordinateur."/>
+
     <!--微软拼音输入法-->
     <String Target="微软拼音输入法" Link="Méthode de saisie pinyin de Microsoft"/>
     <String Target="微软拼音默认为英语输入（by Rambin）" Link="Utiliser la méthode de saisie en anglais par défaut (par Rambin)"/>
@@ -932,7 +943,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="*关闭远程协助（by 原罪）" Link="*Interdire les connexions d’assistance à distance (par YZ)"/>
 
-    <String Target="*禁用SMB1网络协议（by Jhovany200）" Link="*Désactiver l’ancien protocole réseau SMB1 pour le partage de fichiers (par Jhovany200)"/>
+    <String Target="*禁用SMB1网络协议（by MS-PC2）" Link="*Désactiver l’ancien protocole réseau SMB1 pour le partage de fichiers (par MS-PC2)"/>
 
     <!--服务优化-->
     <String Target="服务优化" Link="Optimisation des services"/>
@@ -986,6 +997,9 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="关闭快速启动" Link="Désactiver le démarrage rapide"/>
       <String Target="关闭快速启动将导致系统启动速度变慢！" Link="Désactiver le démarrage rapide peut allonger les temps de démarrage du système."/>
 
+    <String Target="关闭休眠（by powerxing04）" Link="Désactiver l’hibernation (par powerxing04)"/>
+      <String Target="关闭休眠后将导致快速启动以及混合休眠不可用，这样将增加断电丢失数据的风险！" Link="L’arrêt avec redémarrage rapide et la veille prolongée (hibernation hydride) ne seront plus disponibles !"/>
+
     <String Target="禁用组件堆栈（Component Based Servicing）日志" Link="Désactiver les journaux de réparation des composants"/>
 
     <String Target="禁用更新解压模块（Delta Package Expander）日志" Link="Désactiver les journaux d’expansion des paquets de déploiement différentiels"/>
@@ -1002,6 +1016,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="任务栏相关设置" Link="Paramètres de la barre des tâches"/>
     <String Target="关闭商店应用推广（by 、Cloud.）" Link="Désactiver la promotion de l’application sur Windows Store (par Cloud)"/>
     <String Target="关闭多嘴的小娜（by 朽木）" Link="Désactiver Cortana (par XiuMu)"/>
+    <String Target="显示首次登录动画（by intionwun &amp; 组策略编辑器）" Link="Activer l’animation à la première connexion (par intionwun et Group Policy Editor)"/>
     <String Target="关闭游戏录制工具（by 、Cloud.）" Link="Désactiver l’enregistrement des jeux (par Cloud)"/>
     <String Target="启用 Windows 照片查看器（by 心之所向）" Link="Activer la visionneuse de photos de Windows (par XingZhiSuoXiang)"/>
     <String Target="安全相关设置" Link="Paramètres de sécurité"/>
@@ -1016,7 +1031,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="将同时可用下载数目调整到 10（by 溯汐潮）" Link="Ajuster le nombre de téléchargements simultanés à 10 (par Hell Cabrite)"/>
     <String Target="将桌面右键菜单“个性化”调整为Windows 7模式（by 大胖子技术员）" Link="Désactiver « Personnaliser » dans le menu contextuel du bureau en mode Windows 7 (par dpzjsy)"/>
     <String Target="将桌面右键菜单“显示设置”调整为Windows 7模式（by 大胖子技术员）" Link="Désactiver « Paramètres d’affichage » dans le menu contextuel du bureau en mode Windows 7 (par dpzjsy)"/>
-    <String Target="将语言栏隐藏到任务拦（by 溯汐潮）" Link="Masquer la barre de langues dans la barre des tâches (par Hell Cabrite)"/>
+    <String Target="将语言栏隐藏到任务栏（by 溯汐潮）" Link="Masquer la barre de langues dans la barre des tâches (par Hell Cabrite)"/>
     <String Target="快速访问不显示常用文件夹（by 溯汐潮）" Link="Ne pas afficher les dossiers fréquemment utilisés dans la barre d’accès rapide (par Hell Cabrite)"/>
     <String Target="快速访问不显示最近使用的文件（by 溯汐潮）" Link="Ne pas afficher les dossiers récemment utilisés dans la barre d’accès rapide (par Hell Cabrite)"/>
     <String Target="清理被取代的msp补丁并减少Installer目录的大小。" Link="Nettoyer les correctifs .msp remplacés pour réduire la taille du dossier Installer."/>
@@ -1028,9 +1043,13 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
     <String Target="Windows 7体验" Link="Expérience de Windows 7"/>
     <String Target="Windows更新不包括恶意软件删除工具（by ‍Winaero）" Link="Désactiver les outils de suppression de logiciels malveillants dans les mises à jour de Windows (par Winaero)"/>
     <String Target="将“右键菜单”调整为Windows 7模式（by Silence）" Link="Désactiver le menu contextuel du clic droit en mode Windows 7 (par Silence)"/>
-    <String Target="登陆界面默认打开小键盘（by IT之家）" Link="Activer le clavier lors de la connexion (par ITHome)"/>
+    <String Target="登录界面默认打开小键盘（by IT之家）" Link="Activer le clavier lors de la connexion (par ITHome)"/>
     <String Target="禁用组件堆栈（Component Based Servicing）文件备份" Link="Désactiver la sauvegarde de CBS (Component Based Servicing)"/>
     <String Target="任务栏时钟精确到秒（by Luupw3d）" Link="Afficher les secondes sur l’horloge de la barre des tâches (par Luupw3d)"/>
+
+    <String Target="禁用WfpDiag.ETL日志（by powerxing04）" Link="Désactiver le journal WfpDiag.ETL du pare-feu Windows (par powerxing04)"/>
+    <String Target="禁用文件夹的“包含到库中”右键菜单（by choyri）" Link="Désactiver l’option « Inclure dans la bibliothèque » du menu contextuel sur un dossier (par choyri)"/>
+    <String Target="禁用桌面的“NVIDIA 控制面板”右键菜单（by choyri）" Link="Désactiver l’option « Panneau de contrôle NVIDIA » du menu contextuel sur le bureau (par choyri)"/>
     <!--系统优化已经结束-->
 
     <!--Dism++更新程序-->
@@ -1042,7 +1061,7 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
       Target="准备启动下载模块……&#xD;&#xA;"
       Link="Démarrer pour télécharger le module...&#xD;&#xA;"/>
     <String Target="正在下载 - %d/%d" Link="Téléchargement en cours - %d sur %d"/>
-    <String Target="更新文件过程中遇到错误，Orz……" Link="Une erreur est apparue durant la mise à jour, Orz..."/>
+    <String Target="更新文件过程中遇到错误，Orz……" Link="Une erreur est apparue durant la mise à jour. Argh..."/>
 
     <!--命令行-->
     <String Target="退出" Link="Quitter"/>
@@ -1155,6 +1174,10 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="Windows临时安装文件" Link="Fichiers d’installation temporaires de Windows"/>
     <String Target="在系统升级或者还原后留下的系统临时安装文件，如果你确定当前没有进行系统升级或者还原，那么可以安全删除。" Link="Quand le système se met à jour ou restaure, il conserve ses fichiers d’installation. Si vous êtes sûr de ne plus mettre à jour ou restaurer le système, vous pouvez supprimer cette sauvegarde"/>
+
+    <String Target="IDM临时文件（by MS-PC2）" Link="Fichiers temporaires d’Internet Download Manager (par MS-PC2)"/>
+    <String Target="Internet Download Manager临时下载文件。" Link="Fichiers de téléchargement temporaires laissés par Internet Download Manager."/>
+    <String Target="清理IDM临时文件可能导致正在下载的任务需要重新下载！" Link="Le nettoyage des fichiers de téléchargement temporaires d’IDM pourrait causer la reprise des téléchargements!"/>
 
     <String Target="QQ临时数据" Link="Fichiers temporaires Tencent QQ"/>
     <String Target="QQ运行时产生的临时文件还有日志，不影响QQ消息记录，建议定期删除。" Link="Quand QQ s’exécute, il crée des fichiers temporaires et des fichiers journaux. Il faut les supprimer régulièrement."/>
@@ -1286,6 +1309,9 @@ Special Thanks to JP.Sudrets (jp.sudret@wanadoo.fr), P.Verdy (verdyp@gmail.com).
 
     <String Target="Chrome浏览器老版本备份（by Honry）" Link="Versions précédentes du navigateur Google Chrome (par Honry)"/>
     <String Target="Chrome浏览器升级到新版本后留下的备份文件，在故障时回滚到老版本。" Link="Fichiers de sauvegarde de Google Chrome après une mise à jour, pour revenir en arrière en cas de problèmes."/>
+
+    <String Target="Opera浏览器老版本备份（by MS-PC2）" Link="Versions précédentes du navigateur Opera (par MS-PC2)"/>
+    <String Target="Opera浏览器升级到新版本后留下的备份文件，在故障时回滚到老版本。" Link="Fichiers de sauvegarde de Opera après une mise à jour, pour revenir en arrière en cas de problèmes."/>
 
     <String Target="Microsoft .NET安装缓存（by 撕裂五维空间）" Link="Cache d’installation de Microsoft .NET (par SiLieWuWeiKongJian)"/>
     <String Target="安装Microsoft .NET补丁残留的安装缓存。" Link="Durant l’installation de correctifs pour Microsoft .NET, l’intallateur laisse un cache d’installation."/>
@@ -1467,32 +1493,32 @@ I. Droits et obligations
 
 II. Données de vie privée
 
-    1. After initialisation, Dism++ will collect Dism++ users’ system information (including but not restricted to the system version, system structure, system language, CPU information, RAM information), and Dism++’s own report (including but not restricted to the system crash dump and log files) to improve the service. Dism++ will not collect user identification information nor user’s contact information.
-    2. Chuyu Team may send users invitations for testing Dism++, invitations for voting to help Chuyu Team’s decisioning, and software updates, but Chuyu Team will never send messages that include but not limited to advertisements, promotions, frauds, or request for payment.
+    1. Une fois initialisé, Dism++ collectera des informations sur le système des utilisateurs de Dism++ (y compris, mais sans se limiter à cela, la version du système, la structure du système, la langue du système, des informations sur le processeur et la mémoire), ainsi que le rapport d’état sur Dism++ lui-même (y compris, mais sans se limiter à cela, les fichiers de vidage système en cas de crash et les fichiers journaux) afin d’améliorer le service. Dism++ ne collectera pas d’informations sur les utilisateurs ni celles permettant de les contacter.
+    2. Chuyu Team peut envoyer aux utilisateurs des invitations à tester Dism++, des invitations à voter pour aider Chuyu Team dans ses décisions, ainsi que des mises à jour logicielles, mais Chuyu Team n’enverra jamais de messages comprenant notamment des publicités, des promotions, des fraudes ou des demandes de paiement.
 
 III. Évaluez les risques
 
-    1. Chuyu Team has an open-type attitude so everyone can let Dism++ better. Some functions may lead unknown aftermath so Chuyu Team will remove the possible risk and tell the users. But we didn’t solve all the issue. You must bear all the aftermath yourself. Please tell Chuyu Team after you find some problems to prevent others have the problems.
-    2. Please understand and agree because our softwares need to develop. Chuyu Team persists the rights to change or pause or end or revoke all or some service. The users need to bear this danger.
+    1. Chuyu Team adopte une attitude d’ouverture afin que chacun puisse rendre Dism++ meilleur. Certaines fonctions pourraient conduire à des conséquences inconnues et Chuyu Team s’efforcera de supprimer les risques possibles et d’en informer les utilisateurs. Mais nous ne résoudrons pas tous les problèmes. Vous devez vous-même assumer toutes les conséquences. Veuillez cependant aviser Chuyu Team si vous constatez des problèmes afin de prévenir leur survenance chez les autres.
+    2. Veuillez comprendre et accepter que nos logiciels ont besoin d’autres développements. Chuyu Team se réserve les droits de changer, suspendre, arrêter ou révoquer certains services. Les utilisateurs doivent gérer eux-même ces dangers.
 
 IV. Déclaration des droits de propriété intellectuelle
 
-    1. Chuyu Team has all the intellectual property rights of this-service content (including but not limited to program, webpage, text and so on).
-    2. If no important clauses, Chuyu Team has all the intellectual property rights.
-    3. If Chuyu Team didn’t consent in writing, the users cannot process Chuyu Team softwares anyway. Cannot tell others have the rights to proces Chuyu Team softwares.
-    4. Above and other intellectual property rights of Chuyu Team are protected by law. If Chuyu Team didn’t allow you, you cannot disassemble or do others.
+    1. Chuyu Team dispose des droits de propriété intellectuelle sur les contenus de ce service (y compris, mais sans s’y limiter, le logiciel, le site web, le texte, etc.).
+    2. En l’absence de clauses importantes, Chuyu Team a tous les droits de propriété intellectuelles.
+    3. Si Chuyu Team ne l’a pas consenti par écrit, les utilisateurs ne peuvent en aucune façon faire usage des logiciels et services de Chuyu Team. Ils ne peuvent donner aux autres aucun droit d’utiliser les logiciels de Chuyu Team.
+    4. Les droits de propriété intellectuelles ci-dessus et autres droits de Chuyu Team sont protégés par la loi. Si Chuyu Team ne vous l’a pas autorisé, vous ne pouvez pas désassembler ou faire autres choses avec ce service.
 
 V. Responsibilité légale
 
-    1. If Chuyu Team sees someone report some users breached this agreement, Chuyu Team has the rights to ban the users to use Chuyu Team softwares without informing.
-    2. Please understand and agree. Chuyu Team has the rights to reasonably penalize the violation behavior with law.
-    3. Please understand and agree. If the users breach this agreement, lead third party arise the claim (including the reasonable money to lawyer). The users must compensate for Chuyu Team.
+    1. Si Chuyu Team constate que certains utilisateurs enfreignent les termes de cet accord, Chuyu Team a les droits de bannir ces utilisateurs d’utiliser les logiciels de Chuyu Team sans donner d’information.
+    2. Veuillez comprendre et accepter. Chuyu Team a les droits de raisonnablement pénaliser par la loi tout comportement en violation avec cet accord.
+    3. Veuillez comprendre et accepter. Si les utilisateurs rompent cet accord, la partie enfraignante devraient prendre totalement en charge les conséquences de cette décision (y compris les frais raisonnables de justice dus aux avocats). Les utilisateurs doivent compenser Chuyu Team.
 
 VI. Autres
 
-    1. Chuyu Team solemnly tells the users to notice the clauses of responsibility exemption by the Chuyu Team and the rights of limitations by users. Minors should read this agreement with their legal guardians.
-    2. The agreement validity and explanation apply in Chinese law. If the users and Chuyu Team have disputes, settlement must be negotiated first. If it failed, please agree to report the having-jurisdiction people’s court to administer.
-    3. If the agreement clauses be invalid or not executable because of whatever reason, the other clauses are still valid. Binding upon Both.
-    4. The user agreement written in Chinese Simplified should be referred to if the Chinese Simplified version differs from user agreements written in other languages.
+    1. Chuyu Team demande solennellement aux utilisateurs de noter les clauses d’exemption de responsibilité de la Chuyu Team et de limitation des droits des utilisateurs. Les mineurs devraient lire cet accord avec leurs tuteurs légaux.
+    2. La validité et l’explication de cet accord est appliquée d’après la législation de la République populaire de Chine. En cas de disputes entre les users et Chuyu Team, leur règlement doit d’abord être négocié à l’amiable. Si ceci échoue, vous acceptez de vous rapporter à une cour de justice chinoise compétente pour l’administrer.
+    3. Si ces clauses de cet accord s’avéraient non valides ou inapplicables pour quelque raison que ce soit, les autres clauses conserveraient leur validité et leur force contractuelle pour les deux parties.
+    4. L’accord de licence utilisateur écrit en chinois simplifié devrait faire référence si la version en chinois simplidié diffère des accords de licence utilisateur traduits dans d’autres langues.
 </UserAgreement>
 </Data>

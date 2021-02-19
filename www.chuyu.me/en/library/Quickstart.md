@@ -1,40 +1,39 @@
-# 快速入门
-程序的核心功能是清理更新，所以你可能需要在安装更新后才能感受到程序的价值。
+﻿# Quick start
+The core functionality of Dism++ is to clean-up and updates the Windows installation, so you may not experience the full potential of the program until you have installed some updates.
 
-## 界面布局
-如图所示，顶端的标签可以切换不同的系统`（如果你有多个操作系统）`。左侧为功能列表，可以选择你所需要的功能。对于一般用户来说，直接点击`空间回收`就可以啦。
+## User Interface
+As shown below, you may switch between various systems with the tabs above should you have multiple operating systems installed or mounted. On the left you may find and use various features of the program. For average users, they may be interested in the `Disk Clean-up` feature.
 
 ![MainUI](./images/MainUI.png)
 
-## 清理系统垃圾
+## Disk Clean-up
 <br>
->建议你不要过于频繁的清理垃圾，尤其是SSD！一般建议一个月清理一次即可。
+>We do not recommend cleaning your system too frequently, especially for users with an SSD! We recommend cleaning every month or so is enough.
 
 ![CleanupUI](./images/CleanupUI.png)
 
 <br>
-程序启动后，点击`空间回收`，即可看到此界面。然后选中你需要清理的项目，在点击`扫描`（预计可以释放的空间）或者直接点击`清理`（不预估大小，立即删除）。最后如果你有更好的清理项目，点击 `帮助 - 反馈BUG`，提交你的规则。
+After starting up the software, click `Disk Clean-up`, and you will see this interface. Next, select the items you wish to clean-up or remove; click `Scan` to estimate the amount of the space each item could potentially freeup. Alternatively, you may also click `CleanUp` for an immediate delete without an estimate. Ultimately, if you have a better idea for cleaning, click `Help - Feedback`, and submit your rules.
 
 <br>
->温馨提示：风险项目使用橙色标识，另外某些项目存在某些副作用，选中后程序将弹出警告框，请务必仔细确认！
+>Warning: Risky items will be labeled organge. Additionally, removing some of the items may cause unwanted side-effects. Once a risky item is selected, an alert box will pop up to confirm clean-up. Please double check before proceeding!
 
-## 备份系统
-俗话说有“备”无患，现在Dism++ 能够直接将当前系统备份为WIM、ESD，无需进入PE。使用方法很简单，选中当前系统，点击恢复功能 —— 系统备份即可。
+## System Backup
+As a saying goes, forewarned is forearmed. Now Dism++ can back up the current system to a WIM and ESD file without booting into Windows PE. Simply select the current system, and click `Recovery - System Backup` on the menu.
 
 ![BackupImage](./images/BackupImage.png)
 
 ![BackupImage-WimPath](./images/BackupImage-WimPath.png)
-<br>然后输入WIM文件路径，最后点击确定即可。
->如果WIM文件已经存在，则自动增量到现有的WIM文件，执行增量备份。
+<br>Then enter the path to store the image. Finally, just click `OK`. (You can change the image name by double-click the Value items.)
+>If the WIM file already exists, the program will automatically increment to the existing image for an incremental backup.
 
-此外，为了支持系统无法启动时能够还原系统，还需要在 选项 - 详细设置 开启 整合引导菜单，开启后BCD启动项中将多出一个Dism++，你可以在必要时使用此选项来恢复你的系统。
+In order to restore the system in event that your system could not be started, you need to click `Options - More settings` on the menu, then check `Integrated BCD boot menu`. After this, there will be a Dism++ item in the BCD boot menu. You may restore your system there if necessary.
 
-## 还原系统
-当系统出问题时，你可以使用之前备份的系统进行还原，快速恢复计算机环境。Dism++为了降低恢复系统的难度，程序支持热还原模式。即用户无需启动PE直接在本机就能还原。如果你的电脑出问题了，你可以启动Dism++，点击恢复功能 -
-系统还原。选择WIM文件路径后，点击确定即可，如下图所示。
+## System Restore
+When the system goes wrong, you can use your existing backup image to restore the system, swiftly repairing the environment. In order to reduce the difficulty of the recovery process, the program supports the hot restore mode, which means users can store the system without starting a PE. If your system goes wrong, just click `Recovery - System Restore` on the menu. Then select the image. Finally, just click `OK` as shown below.
 
 ![RecoveryImage](./images/RecoveryImage.png)
 
->温馨提示：如果你的系统已经无法启动，那么可以通过BCD菜单中的Dism++`（需要开启 整合引导菜单）`或者启动PE进行上述步骤。
+>Tips: If your system can not be started, and you had checked `Integrated BCD boot menu`, you may restore your system by selecting Dism++ in BCD boot menu or simply boot into Windows PE and perform the steps above
 
-<br>快速入门已经结束，想深入研究的用户可以参考后续文档，祝大家玩的开心。
+<br>This concludes the quick-start guide. Users who want to research further can refer to the follow-up documents. Have a good time!
